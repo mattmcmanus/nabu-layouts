@@ -23,7 +23,18 @@ var nabu_layouts = require('../nabu-layouts.js');
 */
 
 var nabu = {
-  site: {}
+  _files: [ './index.html.jade',
+    './sample.md',
+    './styles.css',
+    './_layouts/default.jade',
+    './_layouts/post.jade',
+    './_posts/2012-12-1-sample1.md',
+    './_posts/2013-01-12-sample2.md',
+    './images/anchor-porter.jpg' ],
+  files: require('../../nabu/lib/files.js'),
+  site: {
+    renderer: 'jade'
+  }
 };
 
 exports['nabu'] = {
@@ -31,24 +42,17 @@ exports['nabu'] = {
     done();
   },
   'process': function(test) {
-    test.expect(1);
+    test.expect(3);
     
     nabu_layouts.process(nabu, function(err, nabu){
       test.ok(nabu.site.layouts, "There shold be a nabu object");
+      test.equal(nabu.site.layouts.default, './_layouts/default.jade', "There shold be a default layout path");
+      test.equal(nabu.site.layouts.post, './_layouts/post.jade', "There shold be a default layout path");
       // test.ok((nabu.site.length > 0), "There shold be at least 1 page");
       test.done();
     });
     
   },
-  // 'generate': function(test) {
-  //   test.expect(3);
-  //   // tests here
-  //   nabu.generate();
-  //   test.ok(fs.existsSync('_site'), "_site dir exists");
-  //   test.ok(fs.existsSync('_site/index.html'), "The homepage exists");
-  //   test.ok(fs.existsSync('_site/images/anchor-porter.jpg'), "The image exists");
-  //   test.done();
-  // },
   tearDown: function(done) {
     done();
   }

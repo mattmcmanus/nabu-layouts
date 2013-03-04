@@ -14,18 +14,16 @@ var path = require('path');
 var contentFolder = '_layouts';
 
 exports.process = function(nabu, next) {
-  console.log("LAYTOUSTS");
+  // Find all of the paths containing '_layouts'
+  var layoutsPaths = nabu.files.findInFolder(nabu._files, contentFolder);
 
-  // var layouts = nabu.utils.findFilesInFolder(nabu.files, contentFolder);
+  // Transform the array into an object with appropriate keys
+  var layouts = {};
+  layoutsPaths.forEach(function(layout) {
+    layouts[path.basename(layout.split('.')[1])] = layout;
+  });
 
-  // // Update file list
-  // nabu.files = nabu.utils.removePaths(nabu.files, layouts);
-
-  // var layoutsObject = {};
-  // layouts.forEach(function(layout) {
-  //   layoutsObject[path.basename(layout.split('.')[1])] = layout;
-  // });
-  nabu.site.layouts = {};
+  nabu.site.layouts = layouts;
   
   next(null, nabu);
 };
